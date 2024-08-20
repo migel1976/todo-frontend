@@ -1,35 +1,94 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import {
+  useGetTodosQuery,
+  useAddTodoMutation,
+  useDeleteTodoMutation,
+  useUpdateTodoMutation,
+} from "./redux";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [id, setId] = useState(null);
+  const [title, setTitle] = useState("");
+  const [edit, setEdit] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
+  const { data, isLoading } = useGetTodosQuery();
+  const [addTodo, { isError }] = useAddTodoMutation();
+  const [newTodo, setNewTodo] = useState("");
+  const [deleteTodo] = useDeleteTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
+
+  if (isLoading) return <h1>...Loading</h1>;
+
+  const onNewTodo = async () => {
+    if (newTodo) {
+      await addTodo({ title: newTodo }).unwrap();
+      setNewTodo("");
+    }
+  };
+
+  const onDeleteTodo = async (id) => {
+    await deleteTodo(id).unwrap();
+  };
+
+  const onUpdateTodo = async (todo) => {
+    // const name = prompt() || ''
+    // updateProduct({ ...product, name })
+    setEdit(true);
+    setId(todo.id);
+    setTitle(todo.title);
+  };
+
+  const onCancel = () => {
+    setEdit(false);
+  };
+
+  const onSave = async (todo) => {
+    updateTodo({ ...todo, title });
+    setEdit(false);
+  };
+
+  const filtereData = data.filter((el) => {
+    return el.title.toLowerCase().includes(filterValue);
+  });
+
+  // {data.map((el) => {
 
   return (
     <>
+      <input type="text" onChange={(e) => setFilterValue(e.target.value)} />
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <input
+          type="text"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={onNewTodo}>add </button>
+      <ul>
+        {filtereData.map((el) => {
+          return (
+            <>
+              {edit && el.id === id ? (
+                <div key={el.id}>
+                  <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <button onClick={() => onSave(el)}>save</button>
+                  <button onClick={onCancel}>cancel</button>
+                </div>
+              ) : (
+                <div key={el.id}>
+                  <li onClick={() => onUpdateTodo(el)}>{el.title}</li>
+                  <button onClick={() => onDeleteTodo(el.id)}>delete</button>
+                </div>
+              )}
+              {/* <li key={el.id} onClick={() => onUpdateProduct(el)}>{el.name}</li> */}
+            </>
+          );
+        })}
+      </ul>
     </>
-  )
-}
-
-export default App
+  );
+};
+export default App;
