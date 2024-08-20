@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   useGetTodosQuery,
   useAddTodoMutation,
@@ -17,11 +18,13 @@ const App = () => {
   const [deleteTodo] = useDeleteTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
 
+  const [isChecked, setIsChecked] = useState(false);
+
   if (isLoading) return <h1>...Loading</h1>;
 
   const onNewTodo = async () => {
     if (newTodo) {
-      await addTodo({ title: newTodo }).unwrap();
+      await addTodo({ title: newTodo, status: false }).unwrap();
       setNewTodo("");
     }
   };
@@ -51,6 +54,10 @@ const App = () => {
     return el.title.toLowerCase().includes(filterValue);
   });
 
+  const onChangeStatus = (todo) => {
+    updateTodo({ ...todo, status: !todo.status });
+  };
+
   // {data.map((el) => {
 
   return (
@@ -79,7 +86,21 @@ const App = () => {
                 </div>
               ) : (
                 <div key={el.id}>
-                  <li onClick={() => onUpdateTodo(el)}>{el.title}</li>
+                  <li>
+                    <input
+                      type="checkbox"
+                      checked={el.status}
+                      onChange={() => onChangeStatus(el)}
+                    />
+                    {!el.status ? (
+                      <div>{el.title}</div>
+                    ) : (
+                      <div style={{ textDecoration: "line-through" }}>
+                        {el.title}
+                      </div>
+                    )}
+                  </li>
+                  <button onClick={() => onUpdateTodo(el.id)}>edit</button>
                   <button onClick={() => onDeleteTodo(el.id)}>delete</button>
                 </div>
               )}
