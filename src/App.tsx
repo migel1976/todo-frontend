@@ -9,13 +9,12 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [edit, setEdit] = useState(false);
   const [filterValue, setFilterValue] = useState('');
+  const [newTodo, setNewTodo] = useState('');
+
   const { data, isLoading } = useGetTodosQuery();
   const [addTodo] = useAddTodoMutation();
-  const [newTodo, setNewTodo] = useState('');
   const [deleteTodo] = useDeleteTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
-
-  const [isChecked, setIsChecked] = useState(false);
 
   if (isLoading) return <h1>...Loading</h1>;
 
@@ -53,10 +52,6 @@ const App = () => {
     console.log('onChangeStatus is ', todo);
     updateTodo({ ...todo, status: !todo.status });
   };
-
-  // {filtereData.map((el) => {
-  // {data.map((el) => {
-  // {edit && el.id === id ? (
 
   return (
     <>
