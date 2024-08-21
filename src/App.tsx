@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import {
-  useGetTodosQuery,
-  useAddTodoMutation,
-  useDeleteTodoMutation,
-  useUpdateTodoMutation,
-} from "./redux";
+import { useGetTodosQuery, useAddTodoMutation, useDeleteTodoMutation, useUpdateTodoMutation } from './redux';
+import { TodoItem } from './components/todoitem';
+import { TodoItemEdit } from './components/todoitemedit';
 
 const App = () => {
   const [id, setId] = useState(null);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [edit, setEdit] = useState(false);
-  const [filterValue, setFilterValue] = useState("");
+  const [filterValue, setFilterValue] = useState('');
   const { data, isLoading } = useGetTodosQuery();
-  const [addTodo, { isError }] = useAddTodoMutation();
-  const [newTodo, setNewTodo] = useState("");
+  const [addTodo] = useAddTodoMutation();
+  const [newTodo, setNewTodo] = useState('');
   const [deleteTodo] = useDeleteTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
 
@@ -25,7 +22,7 @@ const App = () => {
   const onNewTodo = async () => {
     if (newTodo) {
       await addTodo({ title: newTodo, status: false }).unwrap();
-      setNewTodo("");
+      setNewTodo('');
     }
   };
 
@@ -34,13 +31,9 @@ const App = () => {
   };
 
   const onUpdateTodo = async (todo) => {
-    // const name = prompt() || ''
-    // updateProduct({ ...product, name })
     setEdit(true);
     setId(todo.id);
     setTitle(todo.title);
-    console.log("edit is ", edit);
-    console.log("title is ", title);
   };
 
   const onCancel = () => {
@@ -57,6 +50,7 @@ const App = () => {
   });
 
   const onChangeStatus = (todo) => {
+    console.log('onChangeStatus is ', todo);
     updateTodo({ ...todo, status: !todo.status });
   };
 
@@ -67,51 +61,28 @@ const App = () => {
   return (
     <>
       <input type="text" onChange={(e) => setFilterValue(e.target.value)} />
-      <div>
-        <input
-          type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-        />
-      </div>
-      <button onClick={onNewTodo}>add </button>
-      <ul>
-        {data.map((el) => {
+      <ol>
+        {filtereData.map((el) => {
           return (
-            <>
+            <div key={el.id}>
               {edit && el.id === id ? (
-                <div key={el.id}>
-                  <input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <button onClick={() => onSave(el)}>save</button>
-                  <button onClick={onCancel}>cancel</button>
-                </div>
+                <TodoItemEdit title={title} todo={el} onSave={onSave} onCancel={onCancel} setTitle={setTitle} />
               ) : (
-                <div key={el.id}>
-                  <li>
-                    <input
-                      type="checkbox"
-                      checked={el.status}
-                      onChange={() => onChangeStatus(el)}
-                    />
-                    {!el.status ? (
-                      <div>{el.title}</div>
-                    ) : (
-                      <div style={{ textDecoration: "line-through" }}>
-                        {el.title}
-                      </div>
-                    )}
-                  </li>
-                  <button onClick={() => onUpdateTodo(el)}>edit</button>
-                  <button onClick={() => onDeleteTodo(el.id)}>delete</button>
-                </div>
+                <TodoItem
+                  todo={el}
+                  onUpdateTodo={onUpdateTodo}
+                  onDeleteTodo={onDeleteTodo}
+                  onChangeStatus={onChangeStatus}
+                />
               )}
-            </>
+            </div>
           );
         })}
-      </ul>
+      </ol>
+      <div>
+        <input type="text" value={newTodo} onChange={(e) => setNewTodo(e.target.value)} />
+        <button onClick={onNewTodo}>Create new Task</button>
+      </div>
     </>
   );
 };
