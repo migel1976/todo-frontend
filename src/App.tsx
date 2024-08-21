@@ -39,6 +39,8 @@ const App = () => {
     setEdit(true);
     setId(todo.id);
     setTitle(todo.title);
+    console.log("edit is ", edit);
+    console.log("title is ", title);
   };
 
   const onCancel = () => {
@@ -58,7 +60,9 @@ const App = () => {
     updateTodo({ ...todo, status: !todo.status });
   };
 
+  // {filtereData.map((el) => {
   // {data.map((el) => {
+  // {edit && el.id === id ? (
 
   return (
     <>
@@ -72,7 +76,7 @@ const App = () => {
       </div>
       <button onClick={onNewTodo}>add </button>
       <ul>
-        {filtereData.map((el) => {
+        {data.map((el) => {
           return (
             <>
               {edit && el.id === id ? (
@@ -100,11 +104,10 @@ const App = () => {
                       </div>
                     )}
                   </li>
-                  <button onClick={() => onUpdateTodo(el.id)}>edit</button>
+                  <button onClick={() => onUpdateTodo(el)}>edit</button>
                   <button onClick={() => onDeleteTodo(el.id)}>delete</button>
                 </div>
               )}
-              {/* <li key={el.id} onClick={() => onUpdateProduct(el)}>{el.name}</li> */}
             </>
           );
         })}
