@@ -1,5 +1,14 @@
 import { ItemContainer, LiContainer } from '../styles';
-export const TodoItem = ({ todo, onUpdateTodo, onDeleteTodo, onChangeStatus }) => {
+import { ITodo } from '../types/todo';
+
+interface TodoItemProps {
+  todo: ITodo;
+  onUpdateTodo: (todo: ITodo) => void;
+  onDeleteTodo: (todo: ITodo) => Promise<void>;
+  onChangeStatus: (todo: ITodo) => Promise<void>;
+}
+
+export const TodoItem = ({ todo, onUpdateTodo, onDeleteTodo, onChangeStatus }: TodoItemProps) => {
   return (
     <ItemContainer>
       <li>
@@ -9,7 +18,7 @@ export const TodoItem = ({ todo, onUpdateTodo, onDeleteTodo, onChangeStatus }) =
         </LiContainer>
       </li>
       <button onClick={() => onUpdateTodo(todo)}>edit</button>
-      <button onClick={() => onDeleteTodo(todo.id)}>delete</button>
+      <button onClick={() => onDeleteTodo(todo)}>delete</button>
     </ItemContainer>
   );
 };

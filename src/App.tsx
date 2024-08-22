@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { useGetTodosQuery, useAddTodoMutation, useDeleteTodoMutation, useUpdateTodoMutation } from './redux';
 import { TodoItem } from './components/todoitem';
 import { TodoItemEdit } from './components/todoitemedit';
+import { ITodo } from './types/todo';
 
 const App = () => {
-  const [id, setId] = useState(null);
+  const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
   const [edit, setEdit] = useState(false);
   const [filterValue, setFilterValue] = useState('');
@@ -25,11 +26,12 @@ const App = () => {
     }
   };
 
-  const onDeleteTodo = async (id) => {
-    await deleteTodo(id).unwrap();
+  const onDeleteTodo = async (todo: ITodo) => {
+    await deleteTodo(todo.id).unwrap();
   };
 
-  const onUpdateTodo = async (todo) => {
+  // const onUpdateTodo = async (todo) => {
+  const onUpdateTodo = (todo: ITodo) => {
     setEdit(true);
     setId(todo.id);
     setTitle(todo.title);
@@ -39,25 +41,24 @@ const App = () => {
     setEdit(false);
   };
 
-  const onSave = async (todo) => {
-    updateTodo({ ...todo, title });
+  const onSave = async (todo: ITodo) => {
+    await updateTodo({ ...todo, title });
     setEdit(false);
   };
 
-  const filtereData = data.filter((el) => {
+  const filtereData = data?.filter((el: ITodo) => {
     return el.title.toLowerCase().includes(filterValue);
   });
 
-  const onChangeStatus = (todo) => {
-    console.log('onChangeStatus is ', todo);
-    updateTodo({ ...todo, status: !todo.status });
+  const onChangeStatus = async (todo: ITodo) => {
+    await updateTodo({ ...todo, status: !todo.status });
   };
 
   return (
     <>
       <input type="text" onChange={(e) => setFilterValue(e.target.value)} />
       <ol>
-        {filtereData.map((el) => {
+        {filtereData?.map((el: ITodo) => {
           return (
             <div key={el.id}>
               {edit && el.id === id ? (

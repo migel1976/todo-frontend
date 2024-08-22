@@ -1,45 +1,39 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { ITodo } from '../types/todo';
 
 export const todosApi = createApi({
-  reducerPath: "todosApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3003/api/todos/" }),
-  tagTypes: ["Todo"],
+  reducerPath: 'todosApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3003/api/todos/' }),
+  tagTypes: ['Todo'],
   endpoints: (builder) => ({
-    getTodos: builder.query({
-      query: () => {
-        return "getall";
-      },
-      providesTags: ["Todo"],
+    getTodos: builder.query<ITodo[] | undefined, void>({
+      query: () => 'getall',
+      providesTags: ['Todo'],
     }),
     addTodo: builder.mutation({
       query: (body) => ({
-        url: "add",
-        method: "POST",
+        url: 'add',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["Todo"],
+      invalidatesTags: ['Todo'],
     }),
     deleteTodo: builder.mutation({
       query: (id) => ({
         url: `remove/${id}`,
-        method: "DELETE",
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Todo"],
+      invalidatesTags: ['Todo'],
     }),
     updateTodo: builder.mutation({
       query: (body) => ({
         url: `edit/${body.id}`,
-        method: "PUT",
+        method: 'PUT',
         body,
       }),
-      invalidatesTags: ["Todo"],
+      invalidatesTags: ['Todo'],
     }),
   }),
 });
 
-export const {
-  useGetTodosQuery,
-  useAddTodoMutation,
-  useDeleteTodoMutation,
-  useUpdateTodoMutation,
-} = todosApi;
+export const { useGetTodosQuery, useAddTodoMutation, useDeleteTodoMutation, useUpdateTodoMutation } = todosApi;
