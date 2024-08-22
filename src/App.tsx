@@ -18,7 +18,6 @@ const App = () => {
   const [deleteTodo] = useDeleteTodoMutation();
   const [updateTodo] = useUpdateTodoMutation();
 
-  if (isLoading) return <h1>...Loading</h1>;
 
   const onNewTodo = async () => {
     if (newTodo) {
@@ -31,7 +30,6 @@ const App = () => {
     await deleteTodo(todo.id).unwrap();
   };
 
-  // const onUpdateTodo = async (todo) => {
   const onUpdateTodo = (todo: ITodo) => {
     setEdit(true);
     setId(todo.id);
@@ -55,6 +53,7 @@ const App = () => {
     await updateTodo({ ...todo, status: !todo.status });
   };
 
+  if (isLoading) return <h1>...Loading</h1>;
   return (
     <Container>
       <MainContainer>
