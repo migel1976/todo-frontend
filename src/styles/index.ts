@@ -1,19 +1,24 @@
 import styled from 'styled-components';
-
-export const NavigateButton = styled.div`
-  display: flex;
-  gap: 20px;
+export const Container = styled.div`
+  margin-left: auto;
+  margin-right: auto;
 `;
 
-export const HeaderPage = styled.div`
-  h1 {
-    text-align: center;
-  }
+export const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000;
+  width: 800px;
 `;
 
 export const ItemContainer = styled.div`
   display: flex;
   gap: 20px;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const LiContainer = styled.div`
@@ -21,38 +26,16 @@ export const LiContainer = styled.div`
   gap: 5px;
 `;
 
-export const BodyContainer = styled.div`
-  background: #00aa9e;
-`;
-
-export const StyleNavbar = styled.div`
-  .navbar-brand {
-    padding-left: 20px;
-    color: #00aa9e;
-  }
-`;
-
-export const StyledComment = styled.div<{ $indentLevel: number }>`
+export const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  padding-top: 16px;
-  padding-left: ${({ $indentLevel }) => `${$indentLevel * 32}px`};
+  gap: 5px;
 `;
 
-export const CommentInfo = styled.div`
+export const AddItemContainer = styled.div`
   display: flex;
-  gap: 4px;
-  color: #00f;
-  font-size: 10px;
+  gap: 5px;
 `;
 
-export const CommentToggle = styled.button`
-  background-color: transparent;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-`;
-
-export const CommentContent = styled.div`
-  background: #00aa8b;
+export const StatusContainer = styled.div`
+  text-decoration: line-through;
 `;

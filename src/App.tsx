@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { Container, MainContainer, AddItemContainer } from './styles';
 
+import { useState } from 'react';
 import { useGetTodosQuery, useAddTodoMutation, useDeleteTodoMutation, useUpdateTodoMutation } from './redux';
 import { TodoItem } from './components/todoitem';
 import { TodoItemEdit } from './components/todoitemedit';
@@ -55,31 +56,33 @@ const App = () => {
   };
 
   return (
-    <>
-      <input type="text" onChange={(e) => setFilterValue(e.target.value)} />
-      <ol>
-        {filtereData?.map((el: ITodo) => {
-          return (
-            <div key={el.id}>
-              {edit && el.id === id ? (
-                <TodoItemEdit title={title} todo={el} onSave={onSave} onCancel={onCancel} setTitle={setTitle} />
-              ) : (
-                <TodoItem
-                  todo={el}
-                  onUpdateTodo={onUpdateTodo}
-                  onDeleteTodo={onDeleteTodo}
-                  onChangeStatus={onChangeStatus}
-                />
-              )}
-            </div>
-          );
-        })}
-      </ol>
-      <div>
-        <input type="text" value={newTodo} onChange={(e) => setNewTodo(e.target.value)} />
-        <button onClick={onNewTodo}>Create new Task</button>
-      </div>
-    </>
+    <Container>
+      <MainContainer>
+        <input type="text" onChange={(e) => setFilterValue(e.target.value)} placeholder="filter" />
+        <ol>
+          {filtereData?.map((el: ITodo) => {
+            return (
+              <div key={el.id}>
+                {edit && el.id === id ? (
+                  <TodoItemEdit title={title} todo={el} onSave={onSave} onCancel={onCancel} setTitle={setTitle} />
+                ) : (
+                  <TodoItem
+                    todo={el}
+                    onUpdateTodo={onUpdateTodo}
+                    onDeleteTodo={onDeleteTodo}
+                    onChangeStatus={onChangeStatus}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </ol>
+        <AddItemContainer>
+          <input type="text" value={newTodo} onChange={(e) => setNewTodo(e.target.value)} />
+          <button onClick={onNewTodo}>Create new Task</button>
+        </AddItemContainer>
+      </MainContainer>
+    </Container>
   );
 };
 export default App;

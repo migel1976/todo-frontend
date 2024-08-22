@@ -11,9 +11,11 @@ interface TodoItemEditProps {
 export const TodoItemEdit = ({ todo, onSave, onCancel, title, setTitle }: TodoItemEditProps) => {
   return (
     <ItemContainer>
-      <input value={title} onChange={(e) => setTitle(e.target.value)} />
-      <button onClick={() => onSave(todo)}>save</button>
-      <button onClick={onCancel}>cancel</button>
+      <li>
+        <input value={title} onChange={(e) => setTitle(e.target.value)} />
+        <button onClick={() => onSave(todo)}>save</button>
+        <button onClick={onCancel}>cancel</button>
+      </li>
     </ItemContainer>
   );
 };
